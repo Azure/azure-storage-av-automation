@@ -3,6 +3,8 @@
 
 Antivirus Automation for Azure Storage is an ARM template that sets resources in your environment in order to protect an Azure blob container from malware by scanning every blob that’s uploaded. The project consists of a function triggered when files are uploaded to or updated in a Blob storage container, and a Windows VM that utilizes  Microsoft Defender Antivirus.
 
+<img src="https://raw.githubusercontent.com/Azure/azure-storage-av-automation/main/AvAutoSystem.png"/>
+
 For each blob uploaded to the protected container, the function will send the blob to the VM for scanning and change the blob location according to the scan results:
 * If the blob is clean, it’s moved to the clean-files container
 * If it contains malware it’s moved to the quarantine container
