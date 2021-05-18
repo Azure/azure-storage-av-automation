@@ -36,7 +36,7 @@ The simplest way to create the system is to use an ARM Template that is provided
 There are two ways to deploy the template:
 
 ### Deploy the ARM template from the Azure portal:
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FAzure-Security-Center%2Fmaster%2FStorage%20AV%20Automation%2FARM_template%2FAntivirusAutomationForStorageTemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAntivirusAutomationForStorageTemplate.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>   
 
@@ -132,7 +132,7 @@ Unlike the simple scenario this case require some manual steps in order to compl
  
 
 ### Deploy the ARM template from the Azure portal:
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FAzure-Security-Center%2Fmaster%2FStorage%20AV%20Automation%2FARM_template%2FAVAutomationForStorageExistingVnetTemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAVAutomationForStorageExistingVnetTemplate.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>  
 
