@@ -174,7 +174,7 @@ This part is for users that want to modify the code and make some changes.
 
 [blobTriggerAlternatives]: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob-trigger?tabs=csharp#alternatives
 
-[existingVnetScenario]: https://github.com/Azure/azure-storage-av-automation#Existing%20Vnet%20Variation
+[existingVnetScenario]: https://github.com/Azure/azure-storage-av-automation#existing-vnet-variation
 
 [enableAppInsights]: https://docs.microsoft.com/en-us/azure/azure-functions/functions-monitoring
 
