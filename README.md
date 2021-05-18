@@ -23,7 +23,7 @@ List of created resource:
 1. Network Interface - NIC for the VM
 1. Key Vault
     1. Stores connection string to the storage account to scan as a secret
-1. Optional: Public IP - Used to acces the VM from public endpoint
+1. Optional: Public IP - Used to access the VM from public endpoint
 
 ## Getting Started - Simple Deployment
 
