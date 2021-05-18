@@ -52,7 +52,7 @@ namespace ScanHttpServer
             catch (Exception e)
             {
                 Log.Error(e, "Exception caught when trying to start the scanner process.");
-                throw;
+                return null;
             }
         }
 

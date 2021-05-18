@@ -125,12 +125,12 @@ namespace ScanHttpServer
             Log.Logger = new LoggerConfiguration()
                 .Enrich.WithExceptionDetails()
                 .WriteTo.File(logFilePath)
-                .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+                .WriteTo.Console()
                 .MinimumLevel.Debug()
                 .CreateLogger();
         }
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             int port = 4151;
             string[] prefix = {
@@ -152,7 +152,7 @@ namespace ScanHttpServer
             {
                 Log.Information("Waiting for requests...");
                 var context = listener.GetContext();
-                await HandleRequestAsync(context);
+                Task.Run(() => HandleRequestAsync(context));
             }
         }
     }

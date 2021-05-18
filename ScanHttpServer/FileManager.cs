@@ -22,7 +22,7 @@ namespace ScanHttpServer
             catch (Exception e)
             {
                 Log.Error(e, "Exception caught when trying to save temp file {tempFileName}.", tempFileName);
-                throw;
+                return null;
             }
         }
     }
