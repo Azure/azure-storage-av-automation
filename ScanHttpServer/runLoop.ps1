@@ -1,5 +1,6 @@
 $ScanHttpServerFolder = "C:\ScanHttpServer\bin"
 $ExePath = "$ScanHttpServerFolder\ScanHttpServer.dll"
+$JobName = "StartRunLoopScanHttpServer"
 
 cd $ScanHttpServerFolder
 # Install .net 5 sdk + runtime
@@ -9,6 +10,12 @@ if (-Not (Test-Path $ScanHttpServerFolder\dotnet-install.ps1)){
 
 #instaling runtime
 .\dotnet-install.ps1 -Channel Current -Runtime dotnet
+
+if((Get-ScheduledJob -Name $JobName -ErrorAction SilentlyContinue).Length -lt 1){
+    #Adding VMInit.ps1 as startup job
+    $trigger = New-JobTrigger -AtStartup -RandomDelay 00:00:30
+    Register-ScheduledJob -Trigger $trigger -FilePath "$PSScriptRoot\runLoop.ps1" -Name $JobName
+}
 
 Write-Host Starting Process $ExePath
 while($true){
@@ -23,5 +30,3 @@ while($true){
 
     Write-Host Restarting Process $ExePath
 }
-
-Read-Host "press enter to continue"

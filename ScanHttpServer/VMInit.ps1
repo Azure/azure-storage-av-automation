@@ -27,10 +27,6 @@ netsh http add urlacl url="http://+:4151/" user=everyone
 New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Inbound -LocalPort 4151 -Protocol TCP -Action Allow
 New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Outbound -LocalPort 4151 -Protocol TCP -Action Allow
 
-#Adding VMInit.ps1 as startup job
-$trigger = New-JobTrigger -AtStartup -RandomDelay 00:00:30
-Register-ScheduledJob -Trigger $trigger -FilePath "$ScanHttpServerPath\runLoop.ps1" -Name StartRunLoopScanHttpServer
-
 #Updating antivirus Signatures
 Write-Host Updating Signatures for the antivirus
 & "C:\Program Files\Windows Defender\MpCmdRun.exe" -SignatureUpdate
