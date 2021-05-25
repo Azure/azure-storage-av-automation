@@ -1,25 +1,27 @@
 #Init
-$ScanHttpServerPath = "C:\ScanHttpServer"
-$ExePath = "$ScanHttpServerPath\bin"
+$ScanHttpServerFolder = "C:\ScanHttpServer\bin"
 
-New-Item -ItemType Directory $ScanHttpServerPath
-New-Item -ItemType Directory $ExePath
+Start-Transcript -Path C:\VmInit.log
+New-Item -ItemType Directory C:\ScanHttpServer
+New-Item -ItemType Directory $ScanHttpServerFolder
 
 if($args.Count -gt 0){
-    if(-Not (Test-Path $ExePath\vminit.config)){
-        New-Item $ExePath\vminit.config
+    if(-Not (Test-Path $ScanHttpServerFolder\vminit.config)){
+        New-Item $ScanHttpServerFolder\vminit.config
     }
-    Set-Content $ExePath\vminit.config $args[0]
+    Set-Content $ScanHttpServerFolder\vminit.config $args[0]
 }
 
-$ScanHttpServerBinZipUrl = Get-Content $ExePath\vminit.config
+$ScanHttpServerBinZipUrl = Get-Content $ScanHttpServerFolder\vminit.config
 
 # Download Http Server bin files
-Invoke-WebRequest $ScanHttpServerBinZipUrl -OutFile $ExePath\ScanHttpServer.zip
-Expand-Archive $ExePath\ScanHttpServer.zip -DestinationPath $ExePath\ -Force
-Copy-Item -Path "$ExePath\runLoop.ps1" -Destination $ScanHttpServerPath
+Invoke-WebRequest $ScanHttpServerBinZipUrl -OutFile $ScanHttpServerFolder\ScanHttpServer.zip
+Expand-Archive $ScanHttpServerFolder\ScanHttpServer.zip -DestinationPath $ScanHttpServerFolder\ -Force
 
-cd $ScanHttpServerPath
+cd $ScanHttpServerFolder
+
+Wrtie-Host Scheduling task for startup
+&schtasks /create /tn StartScanHttpServer /sc onstart /tr "powershell.exe C:\ScanHttpServer\bin\runLoop.ps1"  /NP /DELAY 0001:00 /RU SYSTEM
 
 #Adding firewall rules to enable traffic
 Write-Host adding firewall rules
@@ -33,4 +35,5 @@ Write-Host Updating Signatures for the antivirus
 
 #Running the App
 Write-Host Starting Run-Loop
-Start-Process powershell -ArgumentList ".\runLoop.ps1"
+start-process powershell -verb runas -ArgumentList "$ScanHttpServerFolder\runLoop.ps1"
+Stop-Transcript
