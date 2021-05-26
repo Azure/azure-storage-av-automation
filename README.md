@@ -9,7 +9,7 @@ For each blob uploaded to the protected container, the function will send the bl
 * If the blob is clean, it’s moved to the clean-files container
 * If it contains malware it’s moved to the quarantine container
 
-The Azure function and the VM are connected through a virtual network and communicate using HTTP requests.  
+The Azure function and the VM are connected through a virtual network and communicate using HTTPS requests.  
 
 The system:
 * Supports parallel blob scanning
@@ -62,7 +62,7 @@ Instead, follow the “Existing Vnet variation” section below which will help 
 5. (Optional): See the additional configurations below to support larger scale and custom response
 
 ## Important notes
-* Blobs uploaded to the protected container are sent from the Function to VM through HTTP request inside the Virtual Network.
+* Blobs uploaded to the protected container are sent from the Function to VM through HTTPS request inside the Virtual Network.
 * Files potentially containing malware are saved locally by the VM for scanning. They're deleted afterwards. So be aware that the VM might be compromised.
 * The port number for the communication is hardcoded and can't be passed as parameter.
 * The ARM template deployment can take up to 10 minutes so be patience.
