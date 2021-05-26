@@ -132,9 +132,9 @@ namespace ScanHttpServer
 
         public static void Main(string[] args)
         {
-            int port = 4151;
+            int port = 443;
             string[] prefix = {
-                $"http://+:{port}/"
+                $"https://+:{port}/"
             };
 
             SetUpLogger("ScanHttpServer.log");

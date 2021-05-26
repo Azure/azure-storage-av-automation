@@ -23,11 +23,14 @@ cd $ScanHttpServerFolder
 Wrtie-Host Scheduling task for startup
 &schtasks /create /tn StartScanHttpServer /sc onstart /tr "powershell.exe C:\ScanHttpServer\bin\runLoop.ps1"  /NP /DELAY 0001:00 /RU SYSTEM
 
-#Adding firewall rules to enable traffic
-Write-Host adding firewall rules
-netsh http add urlacl url="http://+:4151/" user=everyone
-New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Inbound -LocalPort 4151 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Outbound -LocalPort 4151 -Protocol TCP -Action Allow
+Write-Host Creating and adding certificate
+
+$cert = New-SelfSignedCertificate –DnsName ScanServerCert -CertStoreLocation "Cert:\LocalMachine\My"
+$thumb = $cert.Thumbprint
+Write-Host successfully created new certificate $cert
+$appGuid = '{'+[guid]::NewGuid().ToString()+'}'
+netsh http delete sslcert ipport=0.0.0.0:443
+netsh http add sslcert ipport=0.0.0.0:443 appid=$appGuid certhash="$thumb"
 
 #Updating antivirus Signatures
 Write-Host Updating Signatures for the antivirus
