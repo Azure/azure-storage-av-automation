@@ -21,17 +21,24 @@ Expand-Archive $ScanHttpServerFolder\ScanHttpServer.zip -DestinationPath $ScanHt
 
 cd $ScanHttpServerFolder
 
-Wrtie-Host Scheduling task for startup
+Write-Host Scheduling task for startup
+
 &schtasks /create /tn StartScanHttpServer /sc onstart /tr "powershell.exe C:\ScanHttpServer\bin\runLoop.ps1"  /NP /DELAY 0001:00 /RU SYSTEM
 
 Write-Host Creating and adding certificate
 
 $cert = New-SelfSignedCertificate -DnsName ScanServerCert -CertStoreLocation "Cert:\LocalMachine\My"
 $thumb = $cert.Thumbprint
-Write-Host successfully created new certificate $cert
 $appGuid = '{'+[guid]::NewGuid().ToString()+'}'
+
+Write-Host successfully created new certificate $cert
+
 netsh http delete sslcert ipport=0.0.0.0:443
 netsh http add sslcert ipport=0.0.0.0:443 appid=$appGuid certhash="$thumb"
+
+Write-Host Adding firewall rules
+New-NetFirewallRule -DisplayName "ServerFunctionComunicationIn" -Direction Inbound -LocalPort 433 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "ServerFunctionComunicationOut" -Direction Outbound -LocalPort 433 -Protocol TCP -Action Allow
 
 #Updating antivirus Signatures
 Write-Host Updating Signatures for the antivirus
