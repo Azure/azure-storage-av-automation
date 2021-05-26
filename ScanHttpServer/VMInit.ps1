@@ -1,5 +1,6 @@
 #Init
 $ScanHttpServerFolder = "C:\ScanHttpServer\bin"
+$runLoopPath = "$ScanHttpServerFolder\runLoop.ps1"
 
 Start-Transcript -Path C:\VmInit.log
 New-Item -ItemType Directory C:\ScanHttpServer
@@ -20,20 +21,30 @@ Expand-Archive $ScanHttpServerFolder\ScanHttpServer.zip -DestinationPath $ScanHt
 
 cd $ScanHttpServerFolder
 
-Wrtie-Host Scheduling task for startup
+Write-Host Scheduling task for startup
+
 &schtasks /create /tn StartScanHttpServer /sc onstart /tr "powershell.exe C:\ScanHttpServer\bin\runLoop.ps1"  /NP /DELAY 0001:00 /RU SYSTEM
 
-#Adding firewall rules to enable traffic
-Write-Host adding firewall rules
-netsh http add urlacl url="http://+:4151/" user=everyone
-New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Inbound -LocalPort 4151 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "allowing port 4151" -Direction Outbound -LocalPort 4151 -Protocol TCP -Action Allow
+Write-Host Creating and adding certificate
+
+$cert = New-SelfSignedCertificate -DnsName ScanServerCert -CertStoreLocation "Cert:\LocalMachine\My"
+$thumb = $cert.Thumbprint
+$appGuid = '{'+[guid]::NewGuid().ToString()+'}'
+
+Write-Host successfully created new certificate $cert
+
+netsh http delete sslcert ipport=0.0.0.0:443
+netsh http add sslcert ipport=0.0.0.0:443 appid=$appGuid certhash="$thumb"
+
+Write-Host Adding firewall rules
+New-NetFirewallRule -DisplayName "ServerFunctionComunicationIn" -Direction Inbound -LocalPort 443 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "ServerFunctionComunicationOut" -Direction Outbound -LocalPort 443 -Protocol TCP -Action Allow
 
 #Updating antivirus Signatures
 Write-Host Updating Signatures for the antivirus
 & "C:\Program Files\Windows Defender\MpCmdRun.exe" -SignatureUpdate
-
 #Running the App
 Write-Host Starting Run-Loop
-start-process powershell -verb runas -ArgumentList "$ScanHttpServerFolder\runLoop.ps1"
+start-process powershell -verb runas -ArgumentList $runLoopPath
+
 Stop-Transcript

@@ -354,3 +354,5 @@ MigrationBackup/
 
 local*
 *.zip
+ScanUploadedBlobFunction/Properties/ServiceDependencies/functionappi5opjayfolvts - Zip Deploy/profile.arm.json
+ScanUploadedBlobFunction/host.json

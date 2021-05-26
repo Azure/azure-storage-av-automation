@@ -16,7 +16,7 @@ namespace ScanUploadedBlobFunction
             var scannerHost = Environment.GetEnvironmentVariable("windowsdefender_host");
             var scannerPort = Environment.GetEnvironmentVariable("windowsdefender_port");
 
-            var scanner = new ScannerProxy(log, scannerHost, scannerPort);
+            var scanner = new ScannerProxy(log, scannerHost);
             var scanResults = scanner.Scan(myBlob, name);
             if (scanResults == null)
             {

@@ -12,21 +12,26 @@ namespace ScanUploadedBlobFunction
     public class ScannerProxy
     {
         private string hostIp { get; set; }
-        private string port { get; set; }
         private HttpClient client;
         private ILogger log { get; }
 
-        public ScannerProxy(ILogger log, string hostIp, string port)
+        public ScannerProxy(ILogger log, string hostIp)
         {
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) =>
+                {
+                    return true;
+                };
             this.hostIp = hostIp;
-            this.port = port;
             this.log = log;
-            client = new HttpClient();
+            client = new HttpClient(handler);
         }
 
         public ScanResults Scan(Stream blob, string blobName)
         {
-            string url = "http://" + hostIp + ":" + port + "/scan";
+            string url = "https://" + hostIp + "/scan";
             var form = CreateMultiPartForm(blob, blobName);
             log.LogInformation($"Posting request to {url}");
             var response = client.PostAsync(url, form).Result;
