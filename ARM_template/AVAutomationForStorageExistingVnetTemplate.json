@@ -124,7 +124,7 @@
         "hostStorageAccountType": "Standard_LRS",
         "resourceNameSuffix": "[concat('avauto',uniqueString(parameters('NameOfTargetStorageAccount'), parameters('NameOfTargetContainer')))]",
         "appServicePlanName": "[concat('appplan', variables('resourceNameSuffix'))]",
-        "communicationPort": "4151",
+        "communicationPort": "443",
         "computerName": "AntivirusVm",
         "functionAppName": "[concat('functionapp', variables('resourceNameSuffix'))]",
         "functionHostStorageAccountName": "[concat('host', variables('resourceNameSuffix'))]",
