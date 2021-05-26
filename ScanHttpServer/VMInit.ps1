@@ -39,4 +39,5 @@ Write-Host Updating Signatures for the antivirus
 #Running the App
 Write-Host Starting Run-Loop
 start-process powershell -verb runas -ArgumentList "$ScanHttpServerFolder\runLoop.ps1"
+
 Stop-Transcript
