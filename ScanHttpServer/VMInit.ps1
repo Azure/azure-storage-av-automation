@@ -1,5 +1,6 @@
 #Init
 $ScanHttpServerFolder = "C:\ScanHttpServer\bin"
+$runLoopPath = "$ScanHttpServerFolder\runLoop.ps1"
 
 Start-Transcript -Path C:\VmInit.log
 New-Item -ItemType Directory C:\ScanHttpServer
@@ -25,7 +26,7 @@ Wrtie-Host Scheduling task for startup
 
 Write-Host Creating and adding certificate
 
-$cert = New-SelfSignedCertificate –DnsName ScanServerCert -CertStoreLocation "Cert:\LocalMachine\My"
+$cert = New-SelfSignedCertificate -DnsName ScanServerCert -CertStoreLocation "Cert:\LocalMachine\My"
 $thumb = $cert.Thumbprint
 Write-Host successfully created new certificate $cert
 $appGuid = '{'+[guid]::NewGuid().ToString()+'}'
@@ -35,9 +36,8 @@ netsh http add sslcert ipport=0.0.0.0:443 appid=$appGuid certhash="$thumb"
 #Updating antivirus Signatures
 Write-Host Updating Signatures for the antivirus
 & "C:\Program Files\Windows Defender\MpCmdRun.exe" -SignatureUpdate
-
 #Running the App
 Write-Host Starting Run-Loop
-start-process powershell -verb runas -ArgumentList "$ScanHttpServerFolder\runLoop.ps1"
+start-process powershell -verb runas -ArgumentList $runLoopPath
 
 Stop-Transcript
