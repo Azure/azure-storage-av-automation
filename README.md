@@ -161,7 +161,7 @@ This part is for users that want to modify the code and make some changes.
 ### Deployment Steps
 1. Use the following command to clone the repo
     ```
-    git clone https://github.com/Azure/Azure-Security-Center.git
+    git clone https://github.com/Azure/azure-storage-av-automation.git
     ```
 2. Modify the project
 3. Open Storage AV Automation/Scripts/BuildAndDeploy.ps1 and enter the necessary parameters
