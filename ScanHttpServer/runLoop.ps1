@@ -11,7 +11,7 @@ if (-Not (Test-Path $ScanHttpServerFolder\dotnet-install.ps1)){
 }
 
 Write-Host Installing dotnet Runtime
-.\dotnet-install.ps1 -Channel Current -Runtime dotnet
+.\dotnet-install.ps1 -Channel 5.0 -Runtime dotnet
 
 Write-Host Starting Process $ExePath
 while($true){
