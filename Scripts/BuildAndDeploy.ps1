@@ -1,16 +1,18 @@
 param (
-    $sourceCodeContainerName = "release-container",
-    $sourceCodeStorageAccountName = "storage-account-name",
-    $targetContainerName = "upload-container",
-    $targetStorageAccountName = "storage-with-antivirus",
-    $targetResourceGroup = "resource-group-name",
-    $subscriptionID = "subscription-id",
-    $deploymentResourceGroupName = "resource-group-name",
-    $deploymentResourceGroupLocation = "location",
-    $vmUserName = "username",
-    $ArmTemplatFile = "$PSScriptRoot/../ARM_template/AntivirusAutomationForStorageTemplate.json",
-    [SecureString] $vmPassword = "password"
+    [Parameter(Mandatory=$true)][string] $sourceCodeContainerName,
+    [Parameter(Mandatory=$true)][string] $sourceCodeStorageAccountName,
+    [Parameter(Mandatory=$true)][string] $targetContainerName,
+    [Parameter(Mandatory=$true)][string] $targetStorageAccountName,
+    [Parameter(Mandatory=$true)][string] $targetResourceGroup,
+    [Parameter(Mandatory=$true)][string] $subscriptionID,
+    [Parameter(Mandatory=$true)][string] $deploymentResourceGroupName,
+    [Parameter(Mandatory=$true)][string] $deploymentResourceGroupLocation,
+    [Parameter(Mandatory=$true)][string] $vmUserName,
+    [Parameter(Mandatory=$true)][string] $vmPassword,
+    $ArmTemplatFile = "$PSScriptRoot/../ARM_template/AntivirusAutomationForStorageTemplate.json"
 )
+
+$vmPassword = ConvertTo-SecureString $vmPassword -AsPlainText -Force
 
 $ScanHttpServerRoot = "$PSScriptRoot\..\ScanHttpServer"
 $ScanHttpServerZipPath = "$ScanHttpServerRoot\ScanHttpServer.Zip"
@@ -49,7 +51,6 @@ az storage container create `
     --name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login `
     --public-access blob
 
 $ScanHttpServerBlobName = "ScanHttpServer.zip"
@@ -58,16 +59,13 @@ az storage blob upload `
     --name $ScanHttpServerBlobName `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
-    --subscription $subscriptionID `
-    --auth-mode login
+    --subscription $subscriptionID
 
 $ScanHttpServerUrl = az storage blob url `
     --name $ScanHttpServerBlobName `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login
-
 
 $ScanUploadedBlobFubctionBlobName = "ScanUploadedBlobFunction.zip"
 az storage blob upload `
@@ -76,14 +74,12 @@ az storage blob upload `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login
 
 $ScanUploadedBlobFubctionUrl = az storage blob url `
     --name $ScanUploadedBlobFubctionBlobName `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login
 
 $VMInitScriptBlobName = "VMInit.ps1"
 az storage blob upload `
@@ -92,14 +88,12 @@ az storage blob upload `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login
     
 $VMInitScriptUrl = az storage blob url `
     --name $VMInitScriptBlobName `
     --container-name $sourceCodeContainerName `
     --account-name $sourceCodeStorageAccountName `
     --subscription $subscriptionID `
-    --auth-mode login
 
 Write-Host $ScanHttpServerUrl
 Write-Host $ScanUploadedBlobFubctionUrl
@@ -115,12 +109,12 @@ az deployment group create `
     --name "AntivirusAutomationForStorageTemplate" `
     --resource-group $deploymentResourceGroupName `
     --template-file $ArmTemplatFile `
-    --parameters AutoAVAntivirusHttpServerUrl=$ScanHttpServerUrl `
-    --parameters AutoAVAntivirusFunctionZipUrl=$ScanUploadedBlobFubctionUrl `
-    --parameters vmInitScriptUrl=$VMInitScriptUrl `
-    --parameters targetBlobContainerName=$targetContainerName `
-    --parameters targetStorageAccountName=$targetStorageAccountName `
-    --parameters targetStorageAccountResourceGroup=$targetResourceGroup `
-    --parameters targetStorageAccountSubscriptionID=$subscriptionID `
-    --parameters vmAdminUsername=$vmUserName `
-    --parameters vmAdminPassword=$vmPassword
+    --parameters ScanHttpServerZipURL=$ScanHttpServerUrl `
+    --parameters ScanUploadedBlobFunctionZipURL=$ScanUploadedBlobFubctionUrl `
+    --parameters VMInitScriptURL=$VMInitScriptUrl `
+    --parameters NameOfTargetContainer=$targetContainerName `
+    --parameters NameOfTargetStorageAccount=$targetStorageAccountName `
+    --parameters NameOfTheResourceGroupTheTargetStorageAccountBelongsTo=$targetResourceGroup `
+    --parameters SubscriptionIDOfTheTargetStorageAccount=$subscriptionID `
+    --parameters VMAdminUsername=$vmUserName `
+    --parameters VMAdminPassword=$vmPassword
