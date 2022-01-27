@@ -24,6 +24,7 @@
         },
         "NameOfTargetContainer": {
             "type": "string",
+            "defaultValue": "new-files",
             "metadata": {
                 "description": "The name of the container that should be scanned. This field expects the name of an existing container in your target Storage Account."
             }
@@ -100,21 +101,21 @@
         },
         "ScanHttpServerZipURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/ScanHttpServer.zip",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/ScanHttpServer.zip",
             "metadata": {
                 "description": "URL of the zipped Function Code, default value points to the latest build."
             }
         },
         "ScanUploadedBlobFunctionZipURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/ScanUploadedBlobFunction.zip",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/ScanUploadedBlobFunction.zip",
             "metadata": {
                 "description": "URL of the source code of the Http Server That will run on the VM, default value points to the latest build."
             }
         },
         "VMInitScriptURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/VMInit.ps1",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/VMInit.ps1",
             "metadata": {
                 "description": "URL of the VMInit.ps1 script, default value points to the latest build."
             }
