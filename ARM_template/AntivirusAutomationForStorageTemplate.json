@@ -468,7 +468,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
             ],
             "properties": {
                 "displayName": "MalwareAlert",
@@ -508,7 +508,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
             ],
             "properties": {
                 "displayName": "UploadScanAlert",
@@ -548,7 +548,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
             ],
             "properties": {
                 "displayName": "CleanFileSavedAlert",
