@@ -42,7 +42,7 @@ Instead, follow the “Existing Vnet variation” section below which will help 
 
 ## Deployment steps:
 1. Use this link to deploy the ARM template  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAntivirusAutomationForStorageTemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Farchie-st%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAntivirusAutomationForStorageTemplate.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
 
@@ -97,7 +97,7 @@ Unlike the simple scenario this case requires some manual steps in order to comp
 7. Click "Add"
 8. Save the new configuration using the "Save" button
 9. Deploy the ARM template:  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAVAutomationForStorageExistingVnetTemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Farchie-st%2Fazure-storage-av-automation%2Fmain%2FARM_template%2FAVAutomationForStorageExistingVnetTemplate.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>  
 
@@ -161,7 +161,7 @@ This part is for users that want to modify the code and make some changes.
 ### Deployment Steps
 1. Use the following command to clone the repo
     ```
-    git clone https://github.com/Azure/azure-storage-av-automation.git
+    git clone https://github.com/archie-st/azure-storage-av-automation.git
     ```
 2. Modify the project
 3. Open Storage AV Automation/Scripts/BuildAndDeploy.ps1 and enter the necessary parameters
@@ -174,7 +174,7 @@ This part is for users that want to modify the code and make some changes.
 
 [blobTriggerAlternatives]: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob-trigger?tabs=csharp#alternatives
 
-[existingVnetScenario]: https://github.com/Azure/azure-storage-av-automation#existing-vnet-variation
+[existingVnetScenario]: https://github.com/archie-st/azure-storage-av-automation#existing-vnet-variation
 
 [enableAppInsights]: https://docs.microsoft.com/en-us/azure/azure-functions/functions-monitoring
 

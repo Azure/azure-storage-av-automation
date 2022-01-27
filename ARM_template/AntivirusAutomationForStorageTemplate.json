@@ -24,6 +24,7 @@
         },
         "NameOfTargetContainer": {
             "type": "string",
+            "defaultValue": "new-files",
             "metadata": {
                 "description": "The name of the container that should be scanned. This field expects the name of an existing container in your target Storage Account."
             }
@@ -82,21 +83,21 @@
         },
         "ScanHttpServerZipURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/ScanHttpServer.zip",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/ScanHttpServer.zip",
             "metadata": {
                 "description": "URL of the zipped Function Code, default value points to the latest build."
             }
         },
         "ScanUploadedBlobFunctionZipURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/ScanUploadedBlobFunction.zip",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/ScanUploadedBlobFunction.zip",
             "metadata": {
                 "description": "URL of the source code of the Http Server That will run on the VM, default value points to the latest build."
             }
         },
         "VMInitScriptURL": {
             "type": "string",
-            "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/VMInit.ps1",
+            "defaultValue": "https://github.com/archie-st/azure-storage-av-automation/releases/latest/download/VMInit.ps1",
             "metadata": {
                 "description": "URL of the VMInit.ps1 script, default value points to the latest build."
             }
@@ -459,6 +460,114 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "microsoft.insights/scheduledqueryrules",
+            "apiVersion": "2021-08-01",
+            "name": "MalwareAlert",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "MalwareAlert",
+                "description": "Alert when malware is uploaded to the Azure Storage container.",
+                "severity": 2,
+                "enabled": true,
+                "evaluationFrequency": "PT5M",
+                "scopes": [
+                    "[variables('functionAppName')]"
+                ],
+                "targetResourceTypes": [
+                    "microsoft.insights/components"
+                ],
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "query": "traces\n| order by timestamp\n| where message has \"is threat: True\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "timeAggregation": "Count",
+                            "dimensions": [],
+                            "operator": "GreaterThan",
+                            "threshold": 0,
+                            "failingPeriods": {
+                                "numberOfEvaluationPeriods": 1,
+                                "minFailingPeriodsToAlert": 1
+                            }
+                        }
+                    ]
+                },
+                "autoMitigate": false
+            }
+        },
+        {
+            "type": "microsoft.insights/scheduledqueryrules",
+            "apiVersion": "2021-08-01",
+            "name": "UploadScanAlert",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "UploadScanAlert",
+                "description": "Alert when a new file is uploaded and scanned for malware.",
+                "severity": 3,
+                "enabled": true,
+                "evaluationFrequency": "PT5M",
+                "scopes": [
+                    "[variables('functionAppName')]"
+                ],
+                "targetResourceTypes": [
+                    "microsoft.insights/components"
+                ],
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "query": "traces\n| order by timestamp\n| where message has \"Executing 'ScanUploadedBlob'\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "timeAggregation": "Count",
+                            "dimensions": [],
+                            "operator": "GreaterThan",
+                            "threshold": 0,
+                            "failingPeriods": {
+                                "numberOfEvaluationPeriods": 1,
+                                "minFailingPeriodsToAlert": 1
+                            }
+                        }
+                    ]
+                },
+                "autoMitigate": false
+            }
+        },
+        {
+            "type": "microsoft.insights/scheduledqueryrules",
+            "apiVersion": "2021-08-01",
+            "name": "CleanFileSavedAlert",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "CleanFileSavedAlert",
+                "description": "Alert when a file passed the malware scan and saved to the Azure Storage container.",
+                "severity": 3,
+                "enabled": true,
+                "evaluationFrequency": "PT5M",
+                "scopes": [
+                    "[variables('functionAppName')]"
+                ],
+                "targetResourceTypes": [
+                    "microsoft.insights/components"
+                ],
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "query": "traces\n| order by timestamp\n| where message has \"is threat: False\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "timeAggregation": "Count",
+                            "dimensions": [],
+                            "operator": "GreaterThan",
+                            "threshold": 0,
+                            "failingPeriods": {
+                                "numberOfEvaluationPeriods": 1,
+                                "minFailingPeriodsToAlert": 1
+                            }
+                        }
+                    ]
+                },
+                "autoMitigate": false
+            }
         }
     ]
 }
