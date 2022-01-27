@@ -467,7 +467,8 @@
             "name": "MalwareAlert",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "MalwareAlert",
@@ -485,7 +486,7 @@
                 "criteria": {
                     "allOf": [
                         {
-                            "query": "traces\n| order by timestamp\n| where message has \"is threat: True\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "query": "traces | order by timestamp | where message has \"is threat: True\" and operation_Name == \"ScanUploadedBlob\"",
                             "timeAggregation": "Count",
                             "dimensions": [],
                             "operator": "GreaterThan",
@@ -506,7 +507,8 @@
             "name": "UploadScanAlert",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "UploadScanAlert",
@@ -524,7 +526,7 @@
                 "criteria": {
                     "allOf": [
                         {
-                            "query": "traces\n| order by timestamp\n| where message has \"Executing 'ScanUploadedBlob'\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "query": "traces | order by timestamp | where message has \"Executing 'ScanUploadedBlob'\" and operation_Name == \"ScanUploadedBlob\"",
                             "timeAggregation": "Count",
                             "dimensions": [],
                             "operator": "GreaterThan",
@@ -545,7 +547,8 @@
             "name": "CleanFileSavedAlert",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "CleanFileSavedAlert",
@@ -563,7 +566,7 @@
                 "criteria": {
                     "allOf": [
                         {
-                            "query": "traces\n| order by timestamp\n| where message has \"is threat: False\" and operation_Name == \"ScanUploadedBlob\"\n",
+                            "query": "traces | order by timestamp | where message has \"is threat: False\" and operation_Name == \"ScanUploadedBlob\"",
                             "timeAggregation": "Count",
                             "dimensions": [],
                             "operator": "GreaterThan",
