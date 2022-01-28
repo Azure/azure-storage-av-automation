@@ -478,7 +478,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "MalwareAlert",
@@ -487,7 +487,7 @@
                 "enabled": true,
                 "evaluationFrequency": "PT5M",
                 "scopes": [
-                    "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                    "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
                 ],
                 "targetResourceTypes": [
                     "microsoft.insights/components"
@@ -518,7 +518,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "UploadScanAlert",
@@ -527,7 +527,7 @@
                 "enabled": true,
                 "evaluationFrequency": "PT5M",
                 "scopes": [
-                    "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                    "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
                 ],
                 "targetResourceTypes": [
                     "microsoft.insights/components"
@@ -558,7 +558,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMName'))]"
+                "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
             ],
             "properties": {
                 "displayName": "CleanFileSavedAlert",
@@ -567,7 +567,7 @@
                 "enabled": true,
                 "evaluationFrequency": "PT5M",
                 "scopes": [
-                    "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                    "[resourceId('Microsoft.Insights/components', variables('functionAppName'))]"
                 ],
                 "targetResourceTypes": [
                     "microsoft.insights/components"
