@@ -341,7 +341,7 @@
         },
         {
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2021-08-01",
+            "apiVersion": "2014-04-01",
             "name": "[variables('functionAppName')]",
             "location": "[resourceGroup().location]",
             "properties": {
