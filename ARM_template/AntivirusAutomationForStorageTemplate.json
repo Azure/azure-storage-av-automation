@@ -340,6 +340,15 @@
             }
         },
         {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2021-08-01",
+            "name": "[variables('functionAppName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "applicationId": "[variables('functionAppName')]"
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "name": "[variables('functionAppName')]",
             "apiVersion": "2020-09-01",
@@ -398,7 +407,8 @@
                         "WEBSITE_RUN_FROM_PACKAGE": "[parameters('ScanUploadedBlobFunctionZipURL')]",
                         "windowsdefender_host": "[reference(variables('VMNetworkInterfateworkInterfaceName'),'2020-06-01').ipConfigurations[0].properties.privateIPAddress]",
                         "windowsdefender_port": "[variables('communicationPort')]",
-                        "windefenderstorage": "[concat('@Microsoft.KeyVault(SecretUri=',reference(variables('targetStorageAccountSecretName')).secretUriWithVersion,')')]"
+                        "windefenderstorage": "[concat('@Microsoft.KeyVault(SecretUri=',reference(variables('targetStorageAccountSecretName')).secretUriWithVersion,')')]",
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('functionAppName'))).InstrumentationKey]"
                     }
                 }
             ]
