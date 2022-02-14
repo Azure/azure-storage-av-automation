@@ -368,12 +368,12 @@
             "location": "[resourceGroup().location]",
             "kind": "web",
             "dependsOn": [
-                "[resourceId('microsoft.operationalinsights/workspaces', [variables('logworkspacename')])]"
+                "[resourceId('microsoft.operationalinsights/workspaces', variables('logworkspacename'))]"
             ],
             "properties": {
                 "applicationId": "[variables('functionAppName')]",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('microsoft.operationalinsights/workspaces', [variables('logworkspacename')])]",
+                "WorkspaceResourceId": "[resourceId('microsoft.operationalinsights/workspaces', variables('logworkspacename'))]",
                 "IngestionMode": "LogAnalytics"
             }
         },
