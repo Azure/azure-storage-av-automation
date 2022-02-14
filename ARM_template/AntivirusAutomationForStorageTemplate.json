@@ -110,6 +110,7 @@
         "communicationPort": "443",
         "computerName": "AntivirusVm",
         "functionAppName": "[concat('functionapp', variables('uniqueStringSuffix'))]",
+        "logworkspacename": "[concat('logworkspace', variables('uniqueStringSuffix'))]",
         "functionHostStorageAccountName": "[concat('hoststorage', variables('uniqueStringSuffix'))]",
         "functionSubnetAddressPrefix": "10.0.1.0/24",
         "functionSubnetName": "functionSubnet",
@@ -342,7 +343,7 @@
         {
             "type": "microsoft.operationalinsights/workspaces",
             "apiVersion": "2021-12-01-preview",
-            "name": "[variables('functionAppName')]workspace",
+            "name": "[variables('logworkspacename')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "provisioningState": "Succeeded",
@@ -367,12 +368,12 @@
             "location": "[resourceGroup().location]",
             "kind": "web",
             "dependsOn": [
-                "[resourceId('microsoft.operationalinsights/workspaces', [variables('functionAppName')]workspace)]"
+                "[resourceId('microsoft.operationalinsights/workspaces', [variables('logworkspacename')])]"
             ],
             "properties": {
                 "applicationId": "[variables('functionAppName')]",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('microsoft.operationalinsights/workspaces', [variables('functionAppName')]workspace)]",
+                "WorkspaceResourceId": "[resourceId('microsoft.operationalinsights/workspaces', [variables('logworkspacename')])]",
                 "IngestionMode": "LogAnalytics"
             }
         },
