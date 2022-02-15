@@ -110,7 +110,6 @@
         "communicationPort": "443",
         "computerName": "AntivirusVm",
         "functionAppName": "[concat('functionapp', variables('uniqueStringSuffix'))]",
-        "logworkspacename": "[concat('logworkspace', variables('uniqueStringSuffix'))]",
         "functionHostStorageAccountName": "[concat('hoststorage', variables('uniqueStringSuffix'))]",
         "functionSubnetAddressPrefix": "10.0.1.0/24",
         "functionSubnetName": "functionSubnet",
@@ -341,40 +340,12 @@
             }
         },
         {
-            "type": "microsoft.operationalinsights/workspaces",
-            "apiVersion": "2021-12-01-preview",
-            "name": "[variables('logworkspacename')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "provisioningState": "Succeeded",
-                "sku": {
-                    "name": "pergb2018"
-                },
-                "retentionInDays": 30,
-                "features": {
-                    "enableLogAccessUsingOnlyResourcePermissions": true
-                },
-                "workspaceCapping": {
-                    "dailyQuotaGb": -1
-                },
-                "publicNetworkAccessForIngestion": "Enabled",
-                "publicNetworkAccessForQuery": "Enabled"
-            }
-        },
-        {
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02",
+            "apiVersion": "2014-04-01",
             "name": "[variables('functionAppName')]",
             "location": "[resourceGroup().location]",
-            "kind": "web",
-            "dependsOn": [
-                "[resourceId('microsoft.operationalinsights/workspaces', variables('logworkspacename'))]"
-            ],
             "properties": {
-                "applicationId": "[variables('functionAppName')]",
-                "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('microsoft.operationalinsights/workspaces', variables('logworkspacename'))]",
-                "IngestionMode": "LogAnalytics"
+                "applicationId": "[variables('functionAppName')]"
             }
         },
         {
