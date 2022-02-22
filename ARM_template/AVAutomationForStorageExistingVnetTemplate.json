@@ -134,6 +134,7 @@
         "hostStorageAccountSecretName": "hostStorageConnectionString",
         "keyVaultName": "[concat('vault', variables('resourceNameSuffix'))]",
         "keyVaultSkuName": "Standard",
+        "loganalyticsworkspace": "[concat('logworkspace', variables('uniqueStringSuffix'))]",
         "networkSecurityGroupName": "[concat('nsg', variables('resourceNameSuffix'))]",
         "publicIpAddressName": "[concat('publicip', variables('resourceNameSuffix'))]",
         "publicIpId": {
@@ -348,14 +349,41 @@
             }
         },
         {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "name": "[variables('loganalyticsworkspace')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+              "publicNetworkAccessForIngestion": "Enabled",
+              "publicNetworkAccessForQuery": "Enabled",
+              "retentionInDays": 30,
+              "sku": {
+                "name": "pergb2018"
+              },
+              "workspaceCapping": {
+                "dailyQuotaGb": -1
+              },
+              "features": {
+                "enableLogAccessUsingOnlyResourcePermissions": true
+              }
+            }
+        },
+        {
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2014-04-01",
+            "apiVersion": "2020-02-02-preview",
             "name": "[variables('functionAppName')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "applicationId": "[variables('functionAppName')]"
-            }
-        },
+                "ApplicationId": "[variables('functionAppName')]",
+                "Application_Type": "web",
+                "Flow_Type": "Redfield",
+                "Request_Source": "Custom",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('loganalyticsworkspace'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('loganalyticsworkspace'))]"
+            ]
+        },        
         {
             "type": "Microsoft.Web/sites",
             "name": "[variables('functionAppName')]",
