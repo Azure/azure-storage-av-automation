@@ -119,6 +119,13 @@
             "metadata": {
                 "description": "URL of the VMInit.ps1 script, default value points to the latest build."
             }
+        },
+        "addAppInsightsAndAlerts": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies whether App Insights, Log Analytics Workspace and alerts will be included in this deployment."
+            }
         }
     },
     "variables": {
@@ -349,6 +356,7 @@
             }
         },
         {
+            "condition": "[parameters('addAppInsightsAndAlerts')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-06-01",
             "name": "[variables('loganalyticsworkspace')]",
@@ -369,6 +377,7 @@
             }
         },
         {
+            "condition": "[parameters('addAppInsightsAndAlerts')]",
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02-preview",
             "name": "[variables('functionAppName')]",
@@ -509,6 +518,7 @@
             ]
         },
         {
+            "condition": "[parameters('addAppInsightsAndAlerts')]",
             "type": "microsoft.insights/scheduledqueryrules",
             "apiVersion": "2021-08-01",
             "name": "MalwareAlert",
@@ -549,6 +559,7 @@
             }
         },
         {
+            "condition": "[parameters('addAppInsightsAndAlerts')]",
             "type": "microsoft.insights/scheduledqueryrules",
             "apiVersion": "2021-08-01",
             "name": "UploadScanAlert",
@@ -589,6 +600,7 @@
             }
         },
         {
+            "condition": "[parameters('addAppInsightsAndAlerts')]",
             "type": "microsoft.insights/scheduledqueryrules",
             "apiVersion": "2021-08-01",
             "name": "CleanFileSavedAlert",
