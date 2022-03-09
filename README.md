@@ -58,7 +58,7 @@ Instead, follow the “Existing Vnet variation” section below which will help 
     
         You can modify the VM size and App Service Plan any time to support higher loads, the update will cause a few minutes downtime.
 3. (Optional): [enable app insights][enableAppInsights] for the function – to support understanding and debugging the process. You can export telemetry to various destinations, including [Azure Monitor logs][azureMonitorLogs].
-    * App insights can now be enabled with `addAppInsightsAndAlerts` flag in the ARM template - Thanks to @archie-st.
+    * App insights can now be enabled with `addAppInsightsAndAlerts` flag in the ARM template - Thanks to [@archie-st](https://github.com/archie-st).
 4. (Optional): test, by uploading an EICAR. See instructions below
 5. (Optional): See the additional configurations below to support larger scale and custom response
 
