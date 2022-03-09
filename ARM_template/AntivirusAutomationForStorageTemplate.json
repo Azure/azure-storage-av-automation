@@ -81,6 +81,13 @@
                 "description": "Specifies whether the VM will have a public IP endpoint. Having a public endpoint makes the VM less secure."
             }
         },
+        "addAppInsightsAndAlerts": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies whether App Insights, Log Analytics Workspace and alerts will be included in this deployment."
+            }
+        },
         "ScanHttpServerZipURL": {
             "type": "string",
             "defaultValue": "https://github.com/Azure/azure-storage-av-automation/releases/latest/download/ScanHttpServer.zip",
@@ -102,13 +109,6 @@
                 "description": "URL of the VMInit.ps1 script, default value points to the latest build."
             }
         },
-        "addAppInsightsAndAlerts": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Specifies whether App Insights, Log Analytics Workspace and alerts will be included in this deployment."
-            }
-        }
     },
     "variables": {
         "hostStorageAccountType": "Standard_LRS",
