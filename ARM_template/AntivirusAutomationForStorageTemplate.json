@@ -445,7 +445,7 @@
                         "windowsdefender_host": "[reference(variables('VMNetworkInterfateworkInterfaceName'),'2020-06-01').ipConfigurations[0].properties.privateIPAddress]",
                         "windowsdefender_port": "[variables('communicationPort')]",
                         "windefenderstorage": "[concat('@Microsoft.KeyVault(SecretUri=',reference(variables('targetStorageAccountSecretName')).secretUriWithVersion,')')]",
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('functionAppName'))).InstrumentationKey]"
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[if(parameters('addAppInsightsAndAlerts'), reference(concat('microsoft.insights/components/', variables('functionAppName'))).InstrumentationKey, json('null'))]"
                     }
                 }
             ]
