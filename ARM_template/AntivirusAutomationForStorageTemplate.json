@@ -108,7 +108,7 @@
             "metadata": {
                 "description": "URL of the VMInit.ps1 script, default value points to the latest build."
             }
-        },
+        }
     },
     "variables": {
         "hostStorageAccountType": "Standard_LRS",
