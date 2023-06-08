@@ -32,17 +32,25 @@ namespace ScanUploadedBlobFunction
         public ScanResults Scan(Stream blob, string blobName)
         {
             string url = "https://" + hostIp + "/scan";
-            var form = CreateMultiPartForm(blob, blobName);
-            log.LogInformation($"Posting request to {url}");
+            var form = CreateMultiPartForm(blob, blobName, log);
+
+            // Set timeouts to 2-hrs to allow for large files across slow connections
+            client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+            client.DefaultRequestHeaders.Add("Keep-Alive", "5400000");
+            client.Timeout = TimeSpan.FromMinutes(120);
+
+            log.LogInformation($"Posting request to {url} with timeout of {client.Timeout} for {blobName}");
+
             var response = client.PostAsync(url, form).Result;
             string stringContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             if (!response.IsSuccessStatusCode)
             {
-                log.LogError($"Request Failed, {response.StatusCode}:{stringContent}");
+                log.LogError($"Request Failed for {blobName}, {response.StatusCode}:{stringContent}");
                 return null;
             }
-            log.LogInformation($"Request Success Status Code:{response.StatusCode}");
+
+            log.LogInformation($"Request Success for {blobName}, Status Code:{response.StatusCode}");
             var responseDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(stringContent);
             var scanResults = new ScanResults(
                     fileName: blobName,
@@ -53,14 +61,23 @@ namespace ScanUploadedBlobFunction
             return scanResults;
         }
 
-        private static MultipartFormDataContent CreateMultiPartForm(Stream blob, string blobName)
+        private static MultipartFormDataContent CreateMultiPartForm(Stream blob, string blobName, ILogger log)
         {
             string boundry = GenerateRandomBoundry();
             MultipartFormDataContent form = new MultipartFormDataContent(boundry);
+
+            // Use the StreamConent to add the blob to the form rather than reading the entire blob into memory, which was failing if the file size was >2GB
+            form.Add(new StreamContent(blob), "malware", blobName);
+            form.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            /* Commented out the following code as it was reading the entire blob into memory, which was failing if the file size was >2GB due to max array size
             var streamContent = new StreamContent(blob);
             var blobContent = new ByteArrayContent(streamContent.ReadAsByteArrayAsync().Result);
+            log.LogInformation($"After ReadAsByteArrayAsync()");
             blobContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
             form.Add(blobContent, "malware", blobName);
+            */
+
             return form;
         }
 

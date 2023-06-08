@@ -14,7 +14,7 @@ namespace ScanHttpServer
 {
     public class ScanHttpServer
     {
-        
+
         private enum requestType { SCAN }
 
         public static async Task HandleRequestAsync(HttpListenerContext context)
@@ -53,22 +53,31 @@ namespace ScanHttpServer
                 return;
             };
 
-            var scanner = new WindowsDefenderScanner();
+            /* Commented out the following code as it was reading the entire blob into memory, which was failing if the file size was >2GB
             var parser = MultipartFormDataParser.Parse(request.InputStream);
-            var file = parser.Files.First();
+            var fileName = parser.Files.First();
             Log.Information("filename: {fileName}", file.FileName);
+
             string tempFileName = FileUtilities.SaveToTempFile(file.Data);
+            */
+
+            // Stream the blob contents directly to a tempfile rather than loading the whole blob into memory, allowing us to process very large files (>2GB).
+            //var stream = request.InputStream;
+            string filenameInRequest;
+            string tempFileName = FileUtilities.SaveToTempfileStreaming(request.InputStream, out filenameInRequest);
+
             if (tempFileName == null)
             {
                 Log.Error("Can't save the file received in the request");
                 return;
             }
 
+            var scanner = new WindowsDefenderScanner();
             var result = scanner.Scan(tempFileName);
 
-            if(result.isError)
+            if (result.isError)
             {
-                Log.Error("Error during the scanning Error message:{errorMessage}", result.errorMessage);
+                Log.Error($"Error while scanning {tempFileName} - Error message:{result.errorMessage}");
 
                 var data = new
                 {
@@ -81,15 +90,17 @@ namespace ScanHttpServer
 
             var responseData = new
             {
-                FileName = file.FileName,
+                FileName = filenameInRequest, //file.FileName,
                 isThreat = result.isThreat,
                 ThreatType = result.threatType
             };
 
             SendResponse(response, HttpStatusCode.OK, responseData);
 
-            try{
+            try
+            {
                 File.Delete(tempFileName);
+                Log.Information($"Delete tempfile: {tempFileName}");
             }
             catch (Exception e)
             {

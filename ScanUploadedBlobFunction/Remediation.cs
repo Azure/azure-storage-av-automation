@@ -28,12 +28,12 @@ namespace ScanUploadedBlobFunction
                 {
                     string malwareContainerName = Environment.GetEnvironmentVariable("malwareContainerName");
                     MoveBlob(scanResults.fileName, srcContainerName, malwareContainerName, log).GetAwaiter().GetResult();
-                    log.LogInformation("A malicious file was detected. It has been moved from the unscanned container to the quarantine container");
+                    log.LogInformation($"A malicious file {scanResults.fileName} was detected. It has been moved from the unscanned container to the quarantine container");
                 }
 
                 catch (Exception e)
                 {
-                    log.LogError($"A malicious file was detected, but moving it to the quarantine storage container failed. {e.Message}");
+                    log.LogError($"A malicious file {scanResults.fileName} was detected, but moving it to the quarantine storage container failed. {e.Message}");
                 }
             }
 
@@ -43,12 +43,12 @@ namespace ScanUploadedBlobFunction
                 {
                     string cleanContainerName = Environment.GetEnvironmentVariable("cleanContainerName");
                     MoveBlob(scanResults.fileName, srcContainerName, cleanContainerName, log).GetAwaiter().GetResult();
-                    log.LogInformation("The file is clean. It has been moved from the unscanned container to the clean container");
+                    log.LogInformation($"The file {scanResults.fileName} is clean. It has been moved from the unscanned container to the clean container");
                 }
 
                 catch (Exception e)
                 {
-                    log.LogError($"The file is clean, but moving it to the clean storage container failed. {e.Message}");
+                    log.LogError($"The file {scanResults.fileName} is clean, but moving it to the clean storage container failed. {e.Message}");
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace ScanUploadedBlobFunction
         private static async Task MoveBlob(string srcBlobName, string srcContainerName, string destContainerName, ILogger log)
         {
             //Note: if the srcBlob name already exist in the dest container it will be overwritten
-            
+
             var connectionString = Environment.GetEnvironmentVariable("windefenderstorage");
             var srcContainer = new BlobContainerClient(connectionString, srcContainerName);
             var destContainer = new BlobContainerClient(connectionString, destContainerName);
@@ -67,11 +67,11 @@ namespace ScanUploadedBlobFunction
 
             if (await srcBlob.ExistsAsync())
             {
-                log.LogInformation("MoveBlob: Started file copy");
+                log.LogInformation($"MoveBlob: Started file copy - {srcBlobName}");
                 await destBlob.StartCopyFromUriAsync(srcBlob.Uri);
-                log.LogInformation("MoveBlob: Done file copy");
+                log.LogInformation($"MoveBlob: Done file copy - {srcBlobName}");
                 await srcBlob.DeleteAsync();
-                log.LogInformation("MoveBlob: Source file deleted");
+                log.LogInformation($"MoveBlob: Source file deleted - {srcBlobName}");
             }
         }
     }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ScanUploadedBlobFunction": {
+      "commandName": "Project",
+      "commandLineArgs": "verbose"
+    }
+  }
+}
