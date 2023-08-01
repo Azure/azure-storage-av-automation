@@ -50,7 +50,7 @@ Instead, follow the “Existing Vnet variation” section below which will help 
     1. The empty mandatory fields are the only ones you need to complete. 
     All other fields have default parameters that you can leave unmodified.
 
-    2. The “Region” field is determined by the subscription you choose to deploy these resources in. It is recommended you choose an existing subreption or create a new one in the same region your Storage Account is in, in order to avoid moving data between different regions.
+    2. The “Region” field is determined by the subscription you choose to deploy these resources in. It is recommended you choose an existing subcription or create a new one in the same region your Storage Account is in, in order to avoid moving data between different regions.
 
     3. Choose the VM size and the App Service Plan (SKU) to support your needs.
         1. The App Service Plan affects the throughput - the amount of data that can be scanned at a certain time.
